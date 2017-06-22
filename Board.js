@@ -4,41 +4,53 @@ MIN = 0;
 Board = function () {
 
 
-	Board = function() {
+	this.Board = function(n) {
 	    // Constructs a board with n stones per pot
 
-		this.maxkalah = 0;
-		this.minkalah = 0;
+	    if(n.constructor == Board){
 
-		this.maxpots = [0,0,0,0,0];
-		this.minpots = [0,0,0,0,0];
 		
-		this.succ = [];
+			this.maxkalah = 0;
+			this.minkalah = 0;
+
+			this.maxpots = [0,0,0,0,0];
+			this.minpots = [0,0,0,0,0];
+
+			this.succ = [];
 		
-		this.freeturn = false;
+			this.freeturn = false;
+
+	    	this.maxkalah = n.maxkalah;
+	    	this.minkalah = n.minkalah;
+
+	    	for(var i = 0; i < 6; i++){
+	    		this.maxpots[i] = n.maxpots[i];
+	    		this.minpots[i] = n.minpots[i];
+	    	}
+
+	    }
+
+	    else{
+
+			this.maxkalah = 0;
+			this.minkalah = 0;
+
+			this.maxpots = [0,0,0,0,0];
+			this.minpots = [0,0,0,0,0];
 		
-
-	}
-
-	Board = function(n) {
-	    // Constructs a board with n stones per pot
-
-		this.maxkalah = 0;
-		this.minkalah = 0;
-
-		this.maxpots = [0,0,0,0,0];
-		this.minpots = [0,0,0,0,0];
+			this.succ = [];
 		
-		this.succ = [];
+			this.freeturn = false;
 		
-		this.freeturn = false;
-		
-		for(var x = 0; x < 6; x++){
+			for(var x = 0; x < 6; x++){
 
-			this.maxpots[x] = n;
-			this.minpots[x] = n;
+				this.maxpots[x] = n;
+				this.minpots[x] = n;
 
-		}	
+			}
+		}
+
+		return this;
 	}
 
     this.getSucc = function(player){
@@ -64,26 +76,13 @@ Board = function () {
    		return this.succ;	
     }
 
-    this.copyBoard = function(cboard) {
-
-    	newboard = new Board();
-    	console.log(cboard.maxpots[1])
-    	newboard.minkalah = cboard.minkalah;
-    	newboard.maxkalah = cboard.maxkalah;
-
-    	for(var x = 0; x < 6; x++){
-    		newboard.minpots[x] = cboard.minpots[x];
-    		newboard.maxpots[x] = cboard.maxpots[x];
-    	}
-
-    	return newboard;
-    }
 
     this.move = function (player, pot) {
     //  Returns a new Board whose state is that of the Kalah board after Player player
     //      moves using the given pot.
     
-    		newboard = this.copyBoard(this);
+    		var newboard = new Board();
+    		newboard.Board(this)
     		
     		if(newboard.moveBoard(player, pot) == true){
     			newboard.freeturn = true;
@@ -95,7 +94,7 @@ Board = function () {
 	
 	this.freeTurn = function(){
 		
-		return freeturn;
+		return this.freeturn;
 	}
 
 	this.equals = function (o) {
@@ -161,13 +160,13 @@ Board = function () {
     		var stones;
     		side = player;
     		
-    		if(side == Player.MAX){
-    			stones = maxpots[pot];
-    			maxpots[pot] = 0;
+    		if(side == MAX){
+    			stones = this.maxpots[pot];
+    			this.maxpots[pot] = 0;
     		}
     		else{
-    			stones = minpots[pot];
-    			minpots[pot] = 0;
+    			stones = this.minpots[pot];
+    			this.minpots[pot] = 0;
     		}
     		
     		var i = pot+1;
@@ -176,7 +175,7 @@ Board = function () {
     			if(i > 5){
     				if(side == MAX){
     					if(side == player){
-    						maxkalah++;
+    						this.maxkalah++;
     						stones--;
     						if(stones == 0){
     							return true;
@@ -186,7 +185,7 @@ Board = function () {
     				}
     				else{
     					if(side == player){
-    						minkalah++;
+    						this.minkalah++;
     						stones--;
     						if(stones == 0){
     							return true;
@@ -200,10 +199,10 @@ Board = function () {
     			
     			else{
     				if(side == MAX){
-    					maxpots[i]++;
+    					this.maxpots[i]++;
     				}
     				else{
-    					minpots[i]++;
+    					this.minpots[i]++;
     				}
     				stones--;
     				i++;
@@ -215,34 +214,34 @@ Board = function () {
     		//check to see if there are any stones in the opposite pot. Capture them.
     		if(side == MAX){
     			if(side == player){
-    				if(maxpots[i] == 1){     //since we've already added the stone, landing a preveiously empty pot will be at 1 
-    					maxkalah += minpots[5-i];
-    					minpots[5-i] = 0; 
+    				if(this.maxpots[i] == 1){     //since we've already added the stone, landing a preveiously empty pot will be at 1 
+    					this.maxkalah += this.minpots[5-i];
+    					this.minpots[5-i] = 0; 
     				}
     			}
 
     		}
     		else{
     			if(side == player){
-    				if(minpots[i].get() == 1){
-    					minkalah += maxpots[5-i];
-    					maxpots[5-i] = 0; 
+    				if(this.minpots[i] == 1){
+    					this.minkalah += this.maxpots[5-i];
+    					this.maxpots[5-i] = 0; 
     				}
     			}
     		}
     				
-    		if(winCheck()){
+    		if(this.winCheck()){
     		//collect all remaining stones and add them to the proper kalah
-    			if(maxpots[0] > 0){
+    			if(this.maxpots[0] > 0){
     				for(var x = 0; x < 6; x++){
-    					maxkalah += maxpots[x];
-    					maxpots[x] = 0;   
+    					this.maxkalah += this.maxpots[x];
+    					this.maxpots[x] = 0;   
     				}
     			}
-    			if(minpots[0] > 0){
+    			if(this.minpots[0] > 0){
     				for(var x = 0; x < 6; x++){
-    					minkalah += minpots[x]
-    					minpots[x] = 0;
+    					this.minkalah += this.minpots[x]
+    					this.minpots[x] = 0;
     				}
     			}
     		}
@@ -255,7 +254,7 @@ Board = function () {
     //  Help function for moveBoard, performing any required final actions if the current state is final
     
     		for(var x = 0; x < 6; x++){
-    			if(maxpots[x].get() > 0){
+    			if(this.maxpots[x] > 0){
     				break;
     			}
     			
@@ -266,7 +265,7 @@ Board = function () {
     		
     		
     		for(var x = 0; x < 6; x++){
-    			if(minpots[x].get() > 0){
+    			if(this.minpots[x] > 0){
     				break;
     			}
     			
@@ -282,17 +281,17 @@ Board = function () {
 	this.getPot = function (player, pot){
 		
 		if(player == MAX){
-			return maxpots[pot];
+			return this.maxpots[pot];
 		}
 		else{
-			return minpots[pot];
+			return this.minpots[pot];
 		}
 	}
 	
 	this.eval = function () {
     //  Returns the value of the static evaluation function on this Board
     
-    		return maxkalah - minkalah;
+    		return this.maxkalah - this.minkalah;
 	}
 	
 	this.show = function () {
@@ -316,16 +315,8 @@ Board = function () {
 	//for testing
 main = function () {
             
-    		test = new Board(4);
-
-    		test.minkalah = 0;
-    		test.maxkalah = 0;
-    		test.minpots =  [];
-    		test.maxpots = [];
-    		for(var i = 0; i < 6; i++){
-    			test.minpots[x] = 5;
-    			test.maxpots[x] = 5;
-    		}
+    		test = new Board(5);
+    		test = test.Board(5);
 
     		test.show();
     //		test.removed();
@@ -333,15 +324,14 @@ main = function () {
     		
     		test = test.move(MAX, 1);
     		
-    //		test.show();
+    		test.maxpots[3] = 0;
+    		test.show();
     		sc = test.getSucc(MIN);
-  /*  		
-    		sc[4].show();
-    		System.out.println();
-    		sc[5].show();
-*/
+    		
+
 		for(var x = 0; x < 6; x++){
 			if(sc[x] != null){
+				sc[x].show();
 				console.log(sc[x].eval());
 			}
 		}
