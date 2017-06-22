@@ -120,7 +120,7 @@ Board = function () {
     
    // 		boolean win = false;
    
-   		return winCheck();
+   		return this.winCheck();
 	}
 	
 	this.legal = function (player, pot) {
@@ -311,7 +311,7 @@ Board = function () {
 	}
 
 }
-
+/*
 	//for testing
 main = function () {
             
@@ -337,4 +337,4 @@ main = function () {
 		}
 }
 
-var go = main();
+//var go = main();*/
