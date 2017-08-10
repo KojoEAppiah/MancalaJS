@@ -1,5 +1,10 @@
 DEPTH = 8;
 
+myObject= function (imagePath, label) {
+    this.label = ko.observable(label);
+    this.imagePath = ko.observable("static/images/empty_pot.jpg");   
+};
+
 Mancala = function() {
 	
 	
@@ -111,10 +116,10 @@ Mancala = function() {
 		input = -10;
 
 		while(input < low || input > high){
-		
-			input = prompt("Please enter a number");
+			console.log("Please enter a number between " + low + " and " + high);
+			input = readLine();
 	    }
-console.log(input);
+		console.log(input);
 
 	    return input;
 	}

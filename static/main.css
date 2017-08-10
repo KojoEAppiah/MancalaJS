@@ -1,0 +1,25 @@
+.board {
+	background-color: blue;
+	position: relative;
+	left: 20px;
+	font-size:0;
+	width: 	560px;
+}
+
+.aiendpot {
+	padding:0;
+	float: 	left;	
+}
+
+.allpots {
+	display: 	inline-block;	
+}
+.pot {
+	padding:0;
+	display: 	inline-block;	
+}
+
+.playerendpot {
+	padding:0;
+	float: 	right;
+}

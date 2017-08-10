@@ -5,20 +5,72 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="static/main.css" />
     <script src="static/jquery-3.2.0.min.js"></script>
+    <script src="static/bootstrap.min.js"></script>
     <script src="Board.js"></script>
-    <script src="mancala.js"></script>
+    <script src="Mancala.js"></script>
 
   </head>
 
   <body>
 
-    <canvas id="canvas" width="300" height="200" style="border:1px solid #000000">
-    </canvas>
-    <style>
-      #canvas { background-color: #0000FF; }
-    </style>
-    
+  <div class="container">
 
+      <div class="board">
+        
+        <div class=" aiendpot">
+          <img src="static/images/empty_pot.jpg" height="140" width="70">
+        </div>
+
+        <div class="allpots">
+          <div class="aipots">
+            <div class="pot" id="ai0">
+              <img src="static/images/empty_pot.jpg" height="70" width ="70">
+            </div>
+            <div class="pot" id="ai1">
+              <img src="static/images/empty_pot.jpg" height="70" width ="70">
+            </div>
+            <div class="pot" id="ai2">
+              <img src="static/images/empty_pot.jpg" height="70" width ="70">
+            </div>
+            <div class="pot" id="ai3">
+              <img src="static/images/empty_pot.jpg" height="70" width ="70">
+            </div>
+            <div class="pot" id="ai4">
+              <img src="static/images/empty_pot.jpg" height="70" width ="70">
+            </div>
+            <div class="pot" id="ai5">
+              <img src="static/images/empty_pot.jpg" height="70" width ="70">
+            </div>
+          </div>
+
+
+          <div class="playerpots">
+            <div class="pot" id="p0">
+              <img src="static/images/empty_pot.jpg" height="70" width ="70">
+            </div>
+            <div class="pot" id="p1">
+              <img src="static/images/empty_pot.jpg" height="70" width ="70">
+            </div>
+            <div class="pot" id="p2">
+              <img src="static/images/empty_pot.jpg" height="70" width ="70">
+            </div>
+            <div class="pot" id="p3">
+              <img src="static/images/empty_pot.jpg" height="70" width ="70">
+            </div>
+            <div class="pot" id="p4">
+              <img src="static/images/empty_pot.jpg" height="70" width ="70">
+            </div>
+            <div class="pot" id="p5">
+              <img src="static/images/empty_pot.jpg" height="70" width ="70">
+            </div>
+          </div>
+        </div>
+
+        <div class=" playerendpot">
+            <img src="static/images/empty_pot.jpg" height="140" width="70">
+        </div>
+        
+      </div>
 
   </body>
 </html>
