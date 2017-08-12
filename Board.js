@@ -302,6 +302,14 @@ Board = function () {
     		console.log(this.maxkalah + "                    " + this.minkalah);
     		console.log("   " +this.minpots[0]+ "  " +this.minpots[1]+ "  " +this.minpots[2]+ "  " +this.minpots[3]+ "  " +this.minpots[4]+ "  " +this.minpots[5]);
     		console.log("\n");
+
+        $("#aiendpot").attr('src', 'static/images/pot'+this.maxkalah);
+        for(var i = 0; i < 6; i++){
+            $("#ai"+i).attr('src', 'static/images/pot'+this.maxpots[i]);
+            $("#p"+i).attr('src', 'static/images/pot'+this.minpots[i]);        
+        }
+        $("#aiendpot").attr('src', 'static/images/pot'+this.maxkalah);
+
 	}
 
 	this.removed = function(){
@@ -322,7 +330,7 @@ main = function () {
     //		test.removed();
     //		test.show();
     		
-    		test = test.move(MAX, 1);
+    		test = test.move(`, 1);
     		
     		test.maxpots[3] = 0;
     		test.show();

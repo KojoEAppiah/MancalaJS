@@ -5,6 +5,11 @@ myObject= function (imagePath, label) {
     this.imagePath = ko.observable("static/images/empty_pot.jpg");   
 };
 
+function potSelected(pot) {
+
+		console.log("!!"+pot.text());
+}
+
 Mancala = function() {
 	
 	
@@ -111,16 +116,17 @@ Mancala = function() {
 	    }    
 	}
 
+
 	this.getInput = function (low, high){
 		
 		input = -10;
 
-		while(input < low || input > high){
+/*		while(input < low || input > high){
 			console.log("Please enter a number between " + low + " and " + high);
-			input = readLine();
+			input = readline();
 	    }
 		console.log(input);
-
+*/
 	    return input;
 	}
 		
