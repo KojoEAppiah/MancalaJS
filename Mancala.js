@@ -124,7 +124,7 @@ Mancala = function() {
 
 	this.getInput = function (low, high){
 		
-		input = -10;
+		input = 6;
 
 /*		while(input < low || input > high){
 			console.log("Please enter a number between " + low + " and " + high);
@@ -137,8 +137,8 @@ Mancala = function() {
 		
 	this.play = function (depth) {
 	    // Main game play loop
-		gameboard = new Board(4);
-		
+		gameboard = new Board();
+		gameboard.Board(4);
 		this.potplace
 		gameon = true;
 		player = null;
@@ -165,6 +165,7 @@ Mancala = function() {
 	    		
 	    		if(count++ > 40)
 	    			break;
+
 	    		if(player == MAX){
 	    			
 	    			console.log("My turn... hmm...");
@@ -240,5 +241,4 @@ main = function () {
 
 var go = main();
 
-ko.applyBindings(Mancala);
 $(document).ready(main);

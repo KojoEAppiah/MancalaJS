@@ -1,38 +1,45 @@
 MAX = 1;
 MIN = 0;
 
-Board = function (n) {
+Board = function () {
 
 
-        this.maxkalah = ko.observable(0);
-        this.minkalah = ko.observable(0);
+            this.maxkalah = 0;
+            this.minkalah = 0;
 
-        this.maxpots = ko.observableArray([ko.observable(0), ko.observable(0), ko.observable(0), ko.observable(0), ko.observable(0), ko.observable(0)]);
-        this.minpots = ko.observableArray([ko.observable(0), ko.observable(0), ko.observable(0), ko.observable(0), ko.observable(0), ko.observable(0)]);
-		
-		this.succ = [];
-		
-		this.freeturn = false;
-		
-		for(var x = 0; x < 6; x++){
-
-			this.maxpots()[x] = ko.observable(n);
-			this.minpots()[x] = ko.observable(n);
-
-		}
-
-    this.Board = function(board) {
-
-        this.maxkalah(board.maxkalah());
-        this.minkalah(board.minkalah());
-
-        this.succ = board.succ;
+            this.maxpots = [0,0,0,0,0,0]
+            this.minpots = [0,0,0,0,0,0]
         
-        this.freeturn = board.freeturn;
+            this.succ = [];
         
-        this.maxpots = ko.observableArray(board.maxpots());
+            this.freeturn = false;
 
-        this.minpots = ko.observableArray(board.minpots());
+    this.Board = function(n) {
+
+        if(n.constructor != Board.constructor){
+		
+            for(var x = 0; x < 6; x++){
+
+                this.maxpots[x] = n;
+                this.minpots[x] = n;
+            }
+        }
+
+        else {
+
+            this.maxkalah = n.maxkalah;
+            this.minkalah = n.minkalah;
+
+            this.succ = n.succ;
+        
+            this.freeturn = n.freeturn;
+        
+            for(var x = 0; x < 6; x++){
+
+                this.maxpots[x] = n.maxpots[x];
+                this.minpots[x] = n.minpost[x];
+            }
+        }
 
     }
 
@@ -44,7 +51,7 @@ Board = function (n) {
     			
     		for(var x = 0; x < 6; x++){
     				
-    			if(this.maxpots()[x] > 0){
+    			if(this.maxpots[x] > 0){
     				this.succ[x] = this.move(player, x);
     			}
     		}
@@ -52,7 +59,7 @@ Board = function (n) {
     		
     	else{	
     		for(var x = 0; x < 6; x++){
-    			if(this.minpots()[x] > 0){
+    			if(this.minpots[x] > 0){
     				this.succ[x] = this.move(player, x);
     			}
     		}
@@ -86,12 +93,12 @@ Board = function (n) {
     //  Board equality is required to properly maintain open and closed lists in minimax.
     //  Two boards should be equal if they have the same number of stones in all corresponding pots and Kalahs
 
-   		if((o.maxkalah() != this.maxkalah())  || (o.minkalah() != this.minkalah())){
+   		if((o.maxkalah != this.maxkalah)  || (o.minkalah != this.minkalah)){
    			return false;
     	}
     			
     	for(var x = 0; x < 6; x++){
-   			if((o.minpots()[x]() != this.minpots()[x]())  ||  (o.maxpots()[x]() != this.maxpots()[x]())){
+   			if((o.minpots[x] != this.minpots[x])  ||  (o.maxpots[x] != this.maxpots[x])){
     				return false;
     		}
     	}
@@ -118,13 +125,13 @@ Board = function (n) {
     		switch(player){
     			
     			case MAX:
-    				if(maxpots()[pot] < 1){
+    				if(maxpots[pot] < 1){
     					return false;
     				}
     				break;
     				
     			case MIN:
-    				if(minpots()[pot] < 1){
+    				if(minpots[pot] < 1){
     					return false;
     				}
     				break;
@@ -146,12 +153,12 @@ Board = function (n) {
     		side = player;
     		
     		if(side == MAX){
-    			stones = this.maxpots()[pot];
-    			this.maxpots()[pot](0);
+    			stones = this.maxpots[pot];
+    			this.maxpots[pot] = 0;
     		}
     		else{
-    			stones = this.minpots()[pot];
-    			this.minpots()[pot](0);
+    			stones = this.minpots[pot];
+    			this.minpots[pot] = 0;
     		}
     		
     		var i = pot+1;
@@ -160,7 +167,7 @@ Board = function (n) {
     			if(i > 5){
     				if(side == MAX){
     					if(side == player){
-    						this.maxkalah(this.maxkalah() + 1); //maxkalah++
+    						this.maxkalah++;
     						stones--;
     						if(stones == 0){
     							return true;
@@ -170,7 +177,7 @@ Board = function (n) {
     				}
     				else{
     					if(side == player){
-    						this.minkalah(this.minkalah() + 1); //minkalah++
+    						this.minkalah++; //minkalah++
     						stones--;
     						if(stones == 0){
     							return true;
@@ -184,10 +191,10 @@ Board = function (n) {
     			
     			else{
     				if(side == MAX){
-    					this.maxpots()[i](this.maxpots()[i]() + 1);
+    					this.maxpots[i]++;
     				}
     				else{
-    					this.minpots()[i](this.minpots()[i]() + 1);
+    					this.minpots[i]++;
     				}
     				stones--;
     				i++;
@@ -199,34 +206,34 @@ Board = function (n) {
     		//check to see if there are any stones in the opposite pot. Capture them.
     		if(side == MAX){
     			if(side == player){
-    				if(this.maxpots()[i] == 1){     //since we've already added the stone, landing a preveiously empty pot will be at 1 
-    					this.maxkalah(this.maxkalah() + this.minpots()[5-i]);
-    					this.minpots()[5-i](0); 
+    				if(this.maxpots[i] == 1){     //since we've already added the stone, landing a preveiously empty pot will be at 1 
+    					this.maxkalah += this.minpots[5-i];
+    					this.minpots[5-i] = 0;
     				}
     			}
 
     		}
     		else{
     			if(side == player){
-    				if(this.minpots()[i] == 1){
-    					this.minkalah(this.minkalah() + this.maxpots()[5-i]);
-    					this.maxpots()[5-i](0); 
+    				if(this.minpots[i] == 1){
+    					this.minkalah += this.maxpots[5-i];
+    					this.maxpots[5-i] = 0;
     				}
     			}
     		}
     				
     		if(this.winCheck()){
     		//collect all remaining stones and add them to the proper kalah
-    			if(this.maxpots()[0] > 0){
+    			if(this.maxpots[0] > 0){
     				for(var x = 0; x < 6; x++){
-    					this.maxkalah(this.maxkalah() + this.maxpots()[x]);
-    					this.maxpots()[x](0);
+    					this.maxkalah += this.maxpots[x];
+    					this.maxpots[x] = 0;
     				}
     			}
-    			if(this.minpots()[0] > 0){
+    			if(this.minpots[0] > 0){
     				for(var x = 0; x < 6; x++){
-    					this.minkalah(this.minkalah() + this.minpots()[x])
-    					this.minpots()[x](0);
+    					this.minkalah += this.minpots[x];
+    					this.minpots[x] = 0;
     				}
     			}
     		}
@@ -239,7 +246,7 @@ Board = function (n) {
     //  Help function for moveBoard, performing any required final actions if the current state is final
     
     		for(var x = 0; x < 6; x++){
-    			if(this.maxpots()[x]() > 0){
+    			if(this.maxpots[x] > 0){
     				break;
     			}
     			
@@ -250,7 +257,7 @@ Board = function (n) {
     		
     		
     		for(var x = 0; x < 6; x++){
-    			if(this.minpots()[x]() > 0){
+    			if(this.minpots[x] > 0){
     				break;
     			}
     			
@@ -265,33 +272,36 @@ Board = function (n) {
 	
 	this.getPot = function (player, pot){
 		
+
 		if(player == MAX){
-			return this.maxpots()[pot]();
+            console.log("noargija" + player);
+			return this.maxpots[pot];
 		}
 		else{
-			return this.minpots()[pot]();
+            console.log(this.minpots[pot]);
+			return this.minpots[pot];
 		}
 	}
 	
 	this.eval = function () {
     //  Returns the value of the static evaluation function on this Board
     
-    		return this.maxkalah() - this.minkalah();
+    		return this.maxkalah - this.minkalah;
 	}
 	
 	this.show = function () {
     //  Prints the board's state to resemble an actual Kalah board.
     
     		console.log("\n");
-    		console.log("   " +this.maxpots()[5]()+ "  " +this.maxpots()[4]()+ "  " +this.maxpots()[3]()+ "  " +this.maxpots()[2]()+ "  " +this.maxpots()[1]()+ "  " +this.maxpots()[0]());
-    		console.log(this.maxkalah() + "                    " + this.minkalah());
-    		console.log("   " +this.minpots()[0]()+ "  " +this.minpots()[1]()+ "  " +this.minpots()[2]()+ "  " +this.minpots()[3]()+ "  " +this.minpots()[4]()+ "  " +this.minpots()[5]());
+    		console.log("   " +this.maxpots[5]+ "  " +this.maxpots[4]+ "  " +this.maxpots[3]+ "  " +this.maxpots[2]+ "  " +this.maxpots[1]+ "  " +this.maxpots[0]);
+    		console.log(this.maxkalah + "                    " + this.minkalah);
+    		console.log("   " +this.minpots[0]+ "  " +this.minpots[1]+ "  " +this.minpots[2]+ "  " +this.minpots[3]+ "  " +this.minpots[4]+ "  " +this.minpots[5]);
     		console.log("\n");
 	}
 
 	this.removed = function(){
-		if(this.maxpots()){
-			this.maxpots()[1].add(9);
+		if(this.maxpots){
+			this.maxpots[1].add(9);
 		}
 	}
 
@@ -311,7 +321,7 @@ main = function () {
     		
     		test = test.move(MAX, 1);
     		
-    		test.maxpots()[3] = 0;
+    		test.maxpots[3] = 0;
     		test.show();
     		sc = test.getSucc(MIN);
     		
