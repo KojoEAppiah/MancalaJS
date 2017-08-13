@@ -117,6 +117,11 @@ Mancala = function() {
 	}
 
 
+	function potSelected(pot){
+	    //do the stuff... animation to
+
+	}
+
 	this.getInput = function (low, high){
 		
 		input = -10;
@@ -133,7 +138,8 @@ Mancala = function() {
 	this.play = function (depth) {
 	    // Main game play loop
 		gameboard = new Board(4);
-		gameboard = gameboard.Board(4);
+		
+		this.potplace
 		gameon = true;
 		player = null;
 		
@@ -154,8 +160,11 @@ Mancala = function() {
 	    	pchoice = -1;
 	    	val = [0,0];
 	    	
+	    	var count = 0;
 	    	while(gameon){
 	    		
+	    		if(count++ > 40)
+	    			break;
 	    		if(player == MAX){
 	    			
 	    			console.log("My turn... hmm...");
@@ -230,3 +239,6 @@ main = function () {
 
 
 var go = main();
+
+ko.applyBindings(Mancala);
+$(document).ready(main);
