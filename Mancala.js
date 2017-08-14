@@ -9,16 +9,27 @@ myObject= function (imagePath, label) {
 potSelected = function(player, pot) {
 
 		console.log("!!   "+player+" "+pot);
-
+gameboard.show();
 		if(gameboard.getPot(player, pot) > 0){
 			console.log("POT! #"+pot);
+			gameboard = gameboard.move(player, pot);
+			gameboard.show();
 
 		}
 		else
 			console.log("empty");
 
+		renderBoard();
 }
 
+	this.renderBoard = function(){
+
+		for(var x = 0; x < 6; x++){
+			console.log('static/images/pots/' + gameboard.minpots[x])
+			$('#ai'+x).children().attr('src','static/images/pots/' + gameboard.maxpots[x] + '.jpg');
+			$('#pi'+x).children().attr('src','static/images/pots/' + gameboard.minpots[x] + '.jpg');
+		}
+	}
 handleDoc = function () {
 console.log('handle');
 
@@ -26,42 +37,42 @@ console.log('handle');
 	
 	//aipots
 	$('.aipots').on('click', '#ai0', function(evt){
-		potSelected(MIN, 0);
+		potSelected(MAX, 0);
 	});
 	$('.aipots').on('click', '#ai1', function(evt){
-		potSelected(MIN, 1);
+		potSelected(MAX, 1);
 	});
 	$('.aipots').on('click', '#ai2', function(evt){
-		potSelected(MIN, 2);
+		potSelected(MAX, 2);
 	});
 	$('.aipots').on('click', '#ai3', function(evt){
-		potSelected(MIN, 3);
+		potSelected(MAX, 3);
 	});
 	$('.aipots').on('click', '#ai4', function(evt){
-		potSelected(MIN, 4);
+		potSelected(MAX, 4);
 	});
 	$('.aipots').on('click', '#ai5', function(evt){
-		potSelected(MIN, 5);
+		potSelected(MAX, 5);
 	});
 
 	//player pots
 	$('.playerpots').on('click', '#p0', function(evt){
-		potSelected(MAX, 0);
+		potSelected(MIN, 0);
 	});
 	$('.playerpots').on('click', '#p1', function(evt){
-		potSelected(MAX, 1);
+		potSelected(MIN, 1);
 	});
 	$('.playerpots').on('click', '#p2', function(evt){
-		potSelected(MAX, 2);
+		potSelected(MIN, 2);
 	});
 	$('.playerpots').on('click', '#p3', function(evt){
-		potSelected(MAX, 3);
+		potSelected(MIN, 3);
 	});
 	$('.playerpots').on('click', '#p4', function(evt){
-		potSelected(MAX, 4);
+		potSelected(MIN, 4);
 	});
 	$('.playerpots').on('click', '#p5', function(evt){
-		potSelected(MAX, 5);
+		potSelected(MIN, 5);
 	});
 
 }
@@ -173,11 +184,6 @@ Mancala = function() {
 	}
 
 
-	function potSelected(pot){
-	    //do the stuff... animation to
-
-	}
-
 	this.getInput = function (low, high){
 		
 		input = 0;
@@ -190,11 +196,12 @@ Mancala = function() {
 */
 	    return input;
 	}
-		
+	
+
 	this.play = function (depth) {
 	    // Main game play loop
-		gameboard = new Board();
-		gameboard.Board(4);
+//		gameboard = new Board();
+//		gameboard.Board(6);
 		gameon = true;
 		player = null;
 		
@@ -288,9 +295,11 @@ main = function () {
 		var depth = DEPTH;
 		handleDoc()
 		console.log("Using Depth Bound " + depth);
-
+		gameboard = new Board();
+		gameboard.Board(6);
+		gameon = true;
 		game = new Mancala();
-		game.play(depth);
+		//game.play(depth);
 	}
 
 

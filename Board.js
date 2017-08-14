@@ -301,7 +301,7 @@ Board = function () {
 
 	this.removed = function(){
 		if(this.maxpots){
-			this.maxpots[1].add(9);
+//			this.maxpots[1].add(9);
 		}
 	}
 
