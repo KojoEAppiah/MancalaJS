@@ -3,7 +3,7 @@ MIN = 0;
 
 Board = function () {
 
-
+        var self = this;
             this.maxkalah = 0;
             this.minkalah = 0;
 
@@ -16,8 +16,8 @@ Board = function () {
 
     this.Board = function(n) {
 
-        if(n.constructor != Board.constructor){
-		
+        if(n.constructor !== Board){
+		console.log("notboard");
             for(var x = 0; x < 6; x++){
 
                 this.maxpots[x] = n;
@@ -37,7 +37,7 @@ Board = function () {
             for(var x = 0; x < 6; x++){
 
                 this.maxpots[x] = n.maxpots[x];
-                this.minpots[x] = n.minpost[x];
+                this.minpots[x] = n.minpots[x];
             }
         }
 
@@ -75,12 +75,12 @@ Board = function () {
     
     		var newboard = new Board();
     		newboard.Board(this);
-    		
+    		        console.log("new "+ newboard.maxpots[2]);
     		if(newboard.moveBoard(player, pot) == true){
     			newboard.freeturn = true;
     		}
     	//	if(player == player.MAX){
-    			
+			
     		return newboard;
 	}
 	
@@ -177,7 +177,7 @@ Board = function () {
     				}
     				else{
     					if(side == player){
-    						this.minkalah++; //minkalah++
+    						this.minkalah++;
     						stones--;
     						if(stones == 0){
     							return true;
@@ -298,13 +298,13 @@ Board = function () {
     		console.log("   " +this.minpots[0]+ "  " +this.minpots[1]+ "  " +this.minpots[2]+ "  " +this.minpots[3]+ "  " +this.minpots[4]+ "  " +this.minpots[5]);
     		console.log("\n");
 	}
-
+/*
 	this.removed = function(){
 		if(this.maxpots){
-//			this.maxpots[1].add(9);
+			this.maxpots[1].add(20);
 		}
 	}
-
+*/
 }
 
 

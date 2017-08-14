@@ -9,7 +9,7 @@ myObject= function (imagePath, label) {
 potSelected = function(player, pot) {
 
 		console.log("!!   "+player+" "+pot);
-gameboard.show();
+		gameboard.show();
 		if(gameboard.getPot(player, pot) > 0){
 			console.log("POT! #"+pot);
 			gameboard = gameboard.move(player, pot);
@@ -27,7 +27,7 @@ gameboard.show();
 		for(var x = 0; x < 6; x++){
 			console.log('static/images/pots/' + gameboard.minpots[x])
 			$('#ai'+x).children().attr('src','static/images/pots/' + gameboard.maxpots[x] + '.jpg');
-			$('#pi'+x).children().attr('src','static/images/pots/' + gameboard.minpots[x] + '.jpg');
+			$('#p'+x).children().attr('src','static/images/pots/' + gameboard.minpots[x] + '.jpg');
 		}
 	}
 handleDoc = function () {
