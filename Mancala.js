@@ -1,13 +1,69 @@
 DEPTH = 8;
+var gameboard;
 
 myObject= function (imagePath, label) {
     this.label = ko.observable(label);
     this.imagePath = ko.observable("static/images/empty_pot.jpg");   
 };
 
-function potSelected(pot) {
+potSelected = function(player, pot) {
 
-		console.log("!!"+pot.text());
+		console.log("!!   "+player+" "+pot);
+
+		if(gameboard.getPot(player, pot) > 0){
+			console.log("POT! #"+pot);
+
+		}
+		else
+			console.log("empty");
+
+}
+
+handleDoc = function () {
+console.log('handle');
+
+// click bindings for each pot
+	
+	//aipots
+	$('.aipots').on('click', '#ai0', function(evt){
+		potSelected(MIN, 0);
+	});
+	$('.aipots').on('click', '#ai1', function(evt){
+		potSelected(MIN, 1);
+	});
+	$('.aipots').on('click', '#ai2', function(evt){
+		potSelected(MIN, 2);
+	});
+	$('.aipots').on('click', '#ai3', function(evt){
+		potSelected(MIN, 3);
+	});
+	$('.aipots').on('click', '#ai4', function(evt){
+		potSelected(MIN, 4);
+	});
+	$('.aipots').on('click', '#ai5', function(evt){
+		potSelected(MIN, 5);
+	});
+
+	//player pots
+	$('.playerpots').on('click', '#p0', function(evt){
+		potSelected(MAX, 0);
+	});
+	$('.playerpots').on('click', '#p1', function(evt){
+		potSelected(MAX, 1);
+	});
+	$('.playerpots').on('click', '#p2', function(evt){
+		potSelected(MAX, 2);
+	});
+	$('.playerpots').on('click', '#p3', function(evt){
+		potSelected(MAX, 3);
+	});
+	$('.playerpots').on('click', '#p4', function(evt){
+		potSelected(MAX, 4);
+	});
+	$('.playerpots').on('click', '#p5', function(evt){
+		potSelected(MAX, 5);
+	});
+
 }
 
 Mancala = function() {
@@ -230,7 +286,7 @@ Mancala = function() {
 main = function () {
 
 		var depth = DEPTH;
-
+		handleDoc()
 		console.log("Using Depth Bound " + depth);
 
 		game = new Mancala();
