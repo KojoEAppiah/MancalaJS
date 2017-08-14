@@ -124,7 +124,7 @@ Mancala = function() {
 
 	this.getInput = function (low, high){
 		
-		input = 6;
+		input = 0;
 
 /*		while(input < low || input > high){
 			console.log("Please enter a number between " + low + " and " + high);
@@ -139,7 +139,6 @@ Mancala = function() {
 	    // Main game play loop
 		gameboard = new Board();
 		gameboard.Board(4);
-		this.potplace
 		gameon = true;
 		player = null;
 		
