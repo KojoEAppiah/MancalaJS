@@ -11,3 +11,4 @@ The game is over when all of one players pots are empty.  Whoever has the most m
 -----------------------------------------------------------------------------------------------------------------------------------------
 
 * To run simply download all of the files and open index.html.
+ 
