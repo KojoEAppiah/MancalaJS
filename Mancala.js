@@ -296,7 +296,7 @@ main = function () {
 		handleDoc()
 		console.log("Using Depth Bound " + depth);
 		gameboard = new Board();
-		gameboard.Board(6);
+		gameboard.Board(5);
 		gameon = true;
 		game = new Mancala();
 		//game.play(depth);
