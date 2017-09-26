@@ -22,8 +22,10 @@ potSelected = function(player, pot) {
 		renderBoard();
 }
 
-	this.renderBoard = function(){
+renderBoard = function(){
 
+	$('.aiendpot').children().attr('src', 'static/images/pots/' + gameboard.maxkalah + '.jpg');
+	$('.playerendpot').children().attr('src', 'static/images/pots/' + gameboard.minkalah + '.jpg');
 		for(var x = 0; x < 6; x++){
 			console.log('static/images/pots/' + gameboard.minpots[x])
 			$('#ai'+x).children().attr('src','static/images/pots/' + gameboard.maxpots[x] + '.jpg');
