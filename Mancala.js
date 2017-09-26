@@ -24,14 +24,44 @@ potSelected = function(player, pot) {
 
 renderBoard = function(){
 
-	$('.aiendpot').children().attr('src', 'static/images/pots/' + gameboard.maxkalah + '.jpg');
-	$('.playerendpot').children().attr('src', 'static/images/pots/' + gameboard.minkalah + '.jpg');
-		for(var x = 0; x < 6; x++){
-			console.log('static/images/pots/' + gameboard.minpots[x])
+
+	$('#aiendpotn').children().attr('src', 'static/images/numbers/' + gameboard.maxkalah + '.jpg');
+	
+	if(gameboard.maxkalah <= 30)
+		$('.aiendpot').children().attr('src', 'static/images/pots/' + gameboard.maxkalah + '.jpg');
+	else
+		$('.aiendpot').children().attr('src', 'static/images/numbers/' + 30 + '.jpg');
+
+	if(gameboard.minkalah <= 30)
+		$('.playerendpot').children().attr('src', 'static/images/pots/' + gameboard.minkalah + '.jpg');
+	else
+		$('.playerendpot').children().attr('src', 'static/images/numbers/' + gameboard.minkalah + '.jpg');
+
+	$('#playerendpotn').children().attr('src', 'static/images/numbers/' + gameboard.minkalah + '.jpg');
+
+	for(var x = 0; x < 6; x++){  // set proper marble count in images.  If there are more than 30 marbles in a pot, use numbers instead.
+		console.log('static/images/pots/' + gameboard.minpots[x])
+
+	$('#ain'+x).children().attr('src','static/images/numbers/' + gameboard.minpots[x] + '.jpg');
+
+		if(gameboard.maxpots[x] <= 30)
 			$('#ai'+x).children().attr('src','static/images/pots/' + gameboard.maxpots[x] + '.jpg');
+		else
+			$('#ai'+x).children().attr('src','static/images/numbers/' + gameboard.maxpots[x] + '.jpg');
+
+		$('#ain'+x).children().attr('src','static/images/numbers/' + gameboard.maxpots[x] + '.jpg');
+		
+		if(gameboard.minpots[x] <= 30)
 			$('#p'+x).children().attr('src','static/images/pots/' + gameboard.minpots[x] + '.jpg');
-		}
+		else
+			$('#p'+x).children().attr('src','static/images/numbers/' + gameboard.minpots[x] + '.jpg');
+
+		$('#pn'+x).children().attr('src','static/images/numbers/' + gameboard.minpots[x] + '.jpg');
+
 	}
+}
+
+
 handleDoc = function () {
 console.log('handle');
 

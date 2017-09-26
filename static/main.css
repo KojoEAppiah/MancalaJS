@@ -1,3 +1,7 @@
+body {
+	margin: auto;
+}
+
 .board {
 	background-color: blue;
 	position: relative;
@@ -22,4 +26,8 @@
 .playerendpot {
 	padding:0;
 	float: 	right;
+}
+
+.number {
+	display: inline-block;l
 }
