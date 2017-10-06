@@ -1,25 +1,37 @@
 DEPTH = 8;
 var gameboard;
+PLAYER = MIN;
 
 myObject= function (imagePath, label) {
     this.label = ko.observable(label);
     this.imagePath = ko.observable("static/images/empty_pot.jpg");   
-};
+};1
 
 potSelected = function(player, pot) {
 
-		console.log("!!   "+player+" "+pot);
-		gameboard.show();
-		if(gameboard.getPot(player, pot) > 0){
-			console.log("POT! #"+pot);
-			gameboard = gameboard.move(player, pot);
-			gameboard.show();
-
+		if(player != PLAYER){
+			alert("NOT YOUR TURN!");
 		}
-		else
-			console.log("empty");
+		else{
 
-		renderBoard();
+			console.log("!!   "+player+" "+pot);
+			gameboard.show();
+			if(gameboard.getPot(player, pot) > 0){
+				console.log("POT! #"+pot);
+				gameboard = gameboard.move(player, pot);
+				gameboard.show();
+			
+				renderBoard();
+
+				if(gameboard.freeTurn()){
+					alert("freeTurn! Go again.")
+				}
+
+				else
+					PLAYER = PLAYER==MIN?MAX:MIN; // switch active player
+				}
+		}
+		
 }
 
 renderBoard = function(){
@@ -265,8 +277,9 @@ Mancala = function() {
 	    			console.log("My turn... hmm...");
 	    			val = this.minimax(gameboard, depth, player);
 	    			pchoice = val[1];
+	    			setTimeout(potSelected(player, pchoice), 1000);
 	    			
-	    			if(pchoice < 0 || pchoice > 5){   //... just in case.
+/*	    			if(pchoice < 0 || pchoice > 5){   //... just in case.
 	    				pchoice = 0;
 	    				while(gameboard.getPot(player, pchoice) < 1){
 	    					pchoice++;
@@ -277,21 +290,17 @@ Mancala = function() {
 	    			gameboard = gameboard.move(player, pchoice);
 	    			gameboard.show();
 	    			if(gameboard.freeTurn()){
-	    				console.log("Freeturn! I go again.");
+	    				alert("Freeturn! I go again.");
 	    			}
 	    			else{
 	    				player = MIN;
-	    			}
+	    			}*/
 	    		}
 	    		
 	    		else{
+
 	    			console.log("Your turn... move (0-5)?");
 	    			
-	    			pchoice = this.getInput(0,5);
-	    			while(gameboard.getPot(player, pchoice) < 1){
-	    					console.log("Invalid choice: That pot is empty.  Please choose another one.");
-	    					pchoice = this.getInput(0,5);
-	    			}
 	    			
 	    			gameboard = gameboard.move(player, pchoice);
 	    			gameboard.show();

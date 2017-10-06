@@ -32,7 +32,7 @@ Board = function () {
 
             this.succ = n.succ;
         
-            this.freeturn = n.freeturn;
+            this.freeturn = false;
         
             for(var x = 0; x < 6; x++){
 
