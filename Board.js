@@ -26,7 +26,7 @@ Board = function () {
         }
 
         else {
-
+            console.log("Board");
             this.maxkalah = n.maxkalah;
             this.minkalah = n.minkalah;
 
@@ -273,14 +273,12 @@ Board = function () {
 	this.getPot = function (player, pot){
 		
 
-		if(player == MAX){
-            console.log("noargija" + player);
+		if(player == MAX)
 			return this.maxpots[pot];
-		}
-		else{
-            console.log(this.minpots[pot]);
+		
+		else
 			return this.minpots[pot];
-		}
+		
 	}
 	
 	this.eval = function () {

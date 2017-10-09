@@ -1,11 +1,12 @@
 DEPTH = 8;
 var gameboard;
+var game;
 PLAYER = MIN;
 
 myObject= function (imagePath, label) {
     this.label = ko.observable(label);
     this.imagePath = ko.observable("static/images/empty_pot.jpg");   
-};1
+};
 
 potSelected = function(player, pot) {
 
@@ -24,14 +25,39 @@ potSelected = function(player, pot) {
 				renderBoard();
 
 				if(gameboard.freeTurn()){
-					alert("freeTurn! Go again.")
+					if(player == MAX){
+						alert("The AI landed in an empty pot; it gets a free turn");
+						setTimeout(aiPlay, 1000);
+					}
+					else{
+						alert("freeTurn! Go again.");
+					}
 				}
 
-				else
-					PLAYER = PLAYER==MIN?MAX:MIN; // switch active player
+				else{
+					PLAYER = (PLAYER==MIN)?MAX:MIN; // switch active player
+			
+					if(PLAYER == MAX)
+						setTimeout(aiPlay, 1000);
 				}
+
+			}
 		}
+
 		
+}
+
+aiPlay = function (){
+
+	pchoice = minimax(gameboard, DEPTH, MAX)[1];
+
+		while(gameboard.maxpots[pchoice] <= 0){
+			console.log(pchoice);
+			pchoice++;
+		}
+	
+	potSelected(MAX, pchoice);
+	console.log("AIPLAY  " + pchoice);
 }
 
 renderBoard = function(){
@@ -52,9 +78,9 @@ renderBoard = function(){
 	$('#playerendpotn').children().attr('src', 'static/images/numbers/' + gameboard.minkalah + '.jpg');
 
 	for(var x = 0; x < 6; x++){  // set proper marble count in images.  If there are more than 30 marbles in a pot, use numbers instead.
-		console.log('static/images/pots/' + gameboard.minpots[x])
 
-	$('#ain'+x).children().attr('src','static/images/numbers/' + gameboard.minpots[x] + '.jpg');
+
+		$('#ain'+x).children().attr('src','static/images/numbers/' + gameboard.minpots[x] + '.jpg');
 
 		if(gameboard.maxpots[x] <= 30)
 			$('#ai'+x).children().attr('src','static/images/pots/' + gameboard.maxpots[x] + '.jpg');
@@ -121,17 +147,14 @@ console.log('handle');
 
 }
 
-Mancala = function() {
-	
-	
-        this.minimax = function (startboard, depth, player) {
+minimax = function (startboard, depth, player) {
 	    //	Performs the minimax procedure by initializing alpha and beta and calling
 	    //  minimax(startboard, depth, player, alpha, beta)
 
-	    return minimax(startboard, depth, player, Integer.MIN_VALUE, Integer.MAX_VALUE);
-	}
+	    return minimax(new Board(startboard), depth, player, Integer.MIN_VALUE, Integer.MAX_VALUE);
+}
 
-        this.minimax = function (startboard, depth, player, alpha, beta) {
+    minimax = function (startboard, depth, player, alpha, beta) {
 	    //  Performs the minimax procedure with cutoff values alpha and beta
 	    
 	    val = [0,0];
@@ -160,12 +183,12 @@ Mancala = function() {
 	    	    succ = startboard.getSucc(player);
 	    	    for(var x = 0; x < 6; x++){ 	    
 	    	    	    if(succ[x] != null){
-	    	    	    	    
+	    	    	    	    console.log("max" + x);
 	    	    	    	    if(succ[x].freeTurn()){
 	    	    	    	    	    
 	    	    	    	    }
 	    	    	    	    
-	    	    	    	    val = this.minimax(succ[x], depth-1, MIN, alpha, beta);
+	    	    	    	    val = minimax(succ[x], depth-1, MIN, alpha, beta);
 	    	    	    	    
 	    	    	    	    
 	    	    	    	    if(alpha < val[0]){
@@ -199,7 +222,7 @@ Mancala = function() {
 	    	    for(var x = 0; x < 6; x++){ 	    
 	    	    	    if(succ[x] != null){
 	    	    	    	    
-	    	    	    	    val = this.minimax(succ[x], depth-1, MIN, alpha, beta);
+	    	    	    	    val = minimax(succ[x], depth-1, MIN, alpha, beta);
 	    	    	    	    
 	    	    	    	    
 	    	    	    	    if(beta > val[0]){
@@ -225,112 +248,9 @@ Mancala = function() {
 	    	    return val; 
 	    	    	    	    
 	    }    
-	}
-
-
-	this.getInput = function (low, high){
-		
-		input = 0;
-
-/*		while(input < low || input > high){
-			console.log("Please enter a number between " + low + " and " + high);
-			input = readline();
-	    }
-		console.log(input);
-*/
-	    return input;
-	}
-	
-
-	this.play = function (depth) {
-	    // Main game play loop
-//		gameboard = new Board();
-//		gameboard.Board(6);
-		gameon = true;
-		player = null;
-		
-	    	console.log("\nWho goes first (0) me; (1) you ?");
-	    	input = "";	
-  	
-	    	if(this.getInput(0,1) == 0){
-	    		console.log("OK, I go first");
-	    		player = MAX;
-	    	}
-	    	else{
-	    		console.log("Ok, you go first");
-	    		player = MIN;
-	    	}
-	    	
-	    	console.log("Initial Board");
-	    	gameboard.show();
-	    	pchoice = -1;
-	    	val = [0,0];
-	    	
-	    	var count = 0;
-	    	while(gameon){
-	    		
-	    		if(count++ > 40)
-	    			break;
-
-	    		if(player == MAX){
-	    			
-	    			console.log("My turn... hmm...");
-	    			val = this.minimax(gameboard, depth, player);
-	    			pchoice = val[1];
-	    			setTimeout(potSelected(player, pchoice), 1000);
-	    			
-/*	    			if(pchoice < 0 || pchoice > 5){   //... just in case.
-	    				pchoice = 0;
-	    				while(gameboard.getPot(player, pchoice) < 1){
-	    					pchoice++;
-	    				}
-	    			}
-	    			
-	    			console.log("I choose " +pchoice);
-	    			gameboard = gameboard.move(player, pchoice);
-	    			gameboard.show();
-	    			if(gameboard.freeTurn()){
-	    				alert("Freeturn! I go again.");
-	    			}
-	    			else{
-	    				player = MIN;
-	    			}*/
-	    		}
-	    		
-	    		else{
-
-	    			console.log("Your turn... move (0-5)?");
-	    			
-	    			
-	    			gameboard = gameboard.move(player, pchoice);
-	    			gameboard.show();
-	    			
-	    			if(gameboard.freeTurn()){
-	    				console.log("Freeturn! You go again.");
-	    			}
-	    			else{
-	    				player = MAX;
-	    			}
-	    		}
-	    		
-	    		if(gameboard.isWin()){
-	    		
-	    			gameon = false;
-	    			
-	    			if(gameboard.eval() > 0){
-	    				console.log("I Won!");
-	    				console.log("...better luck next time.");
-	    			}
-	    			else{
-	    				console.log("You won!");
-	    				console.log("I may need to see if my creator can think up a better heuristic...");
-	    			}
-	    		}
-	    	}
-
-	    	}
-
 }
+
+
 main = function () {
 
 		var depth = DEPTH;
@@ -339,11 +259,10 @@ main = function () {
 		gameboard = new Board();
 		gameboard.Board(5);
 		gameon = true;
-		game = new Mancala();
-		//game.play(depth);
+
 	}
 
 
-var go = main();
+var go = main;
 
 $(document).ready(main);
