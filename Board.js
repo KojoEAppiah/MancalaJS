@@ -13,6 +13,7 @@ Board = function () {
             this.succ = [];
         
             this.freeturn = false;
+            this.parallelpot = false;
 
     this.Board = function(n) {
 
@@ -26,7 +27,6 @@ Board = function () {
         }
 
         else {
-            console.log("Board");
             this.maxkalah = n.maxkalah;
             this.minkalah = n.minkalah;
 
@@ -40,6 +40,8 @@ Board = function () {
                 this.minpots[x] = n.minpots[x];
             }
         }
+
+        return this;
 
     }
 
@@ -75,7 +77,6 @@ Board = function () {
     
     		var newboard = new Board();
     		newboard.Board(this);
-    		        console.log("new "+ newboard.maxpots[2]);
     		if(newboard.moveBoard(player, pot) == true){
     			newboard.freeturn = true;
     		}
@@ -111,7 +112,6 @@ Board = function () {
     //  A final configuration is one where all pots on one side are empty.
     
    // 		boolean win = false;
-   
    		return this.winCheck();
 	}
 	
@@ -209,6 +209,7 @@ Board = function () {
     				if(this.maxpots[i] == 1){     //since we've already added the stone, landing a preveiously empty pot will be at 1 
     					this.maxkalah += this.minpots[5-i];
     					this.minpots[5-i] = 0;
+                        this.parallelpot = true;
     				}
     			}
 
@@ -218,6 +219,7 @@ Board = function () {
     				if(this.minpots[i] == 1){
     					this.minkalah += this.maxpots[5-i];
     					this.maxpots[5-i] = 0;
+                        this.parallelpot = true;
     				}
     			}
     		}
@@ -246,22 +248,24 @@ Board = function () {
     //  Help function for moveBoard, performing any required final actions if the current state is final
     
     		for(var x = 0; x < 6; x++){
-    			if(this.maxpots[x] > 0){
+    			if(self.maxpots[x] > 0){
     				break;
     			}
     			
     			if(x == 5){
+                    console.log('maxempty')
     				return true;
     			}
     		}
     		
     		
     		for(var x = 0; x < 6; x++){
-    			if(this.minpots[x] > 0){
+    			if(self.minpots[x] > 0){
     				break;
     			}
     			
     			if(x == 5){
+                                        console.log('minempty')
     				return true;
     			}
     		}
@@ -296,6 +300,10 @@ Board = function () {
     		console.log("   " +this.minpots[0]+ "  " +this.minpots[1]+ "  " +this.minpots[2]+ "  " +this.minpots[3]+ "  " +this.minpots[4]+ "  " +this.minpots[5]);
     		console.log("\n");
 	}
+
+    this.LandedInEmptyParallelPot = function() {
+        return this.parallelpot;
+    }
 /*
 	this.removed = function(){
 		if(this.maxpots){

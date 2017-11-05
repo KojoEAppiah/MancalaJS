@@ -21,15 +21,15 @@ potSelected = function(player, pot) {
 			if(stones > 0){
 				console.log("POT! #"+pot);
 				gameboard = gameboard.move(player, pot);
-				gameboard.show();
 			
+				gameboard.show();
 				renderMove(player, pot, stones);
 
 				if(gameboard.freeTurn()){
 					if(player == MAX){
 						alert("The AI landed in an empty pot; it gets a free turn");
-						//setTimeout(aiPlay, 1000);
-						aiPlay();
+
+						setTimeout(aiPlay, 1000);
 					}
 					else{
 						alert("freeTurn! Go again.");
@@ -40,8 +40,7 @@ potSelected = function(player, pot) {
 					PLAYER = (PLAYER==MIN)?MAX:MIN; // switch active player
 			
 					if(PLAYER == MAX)
-						//setTimeout(aiPlay, 1000);
-						aiPlay();
+						setTimeout(aiPlay, 1000);
 				}
 
 			}
@@ -51,14 +50,8 @@ potSelected = function(player, pot) {
 aiPlay = function (){
 
 	pchoice = minimax(gameboard, DEPTH, MAX)[1];
-
-	console.log(gameboard.maxpots[pchoice]);
-		while(gameboard.maxpots[pchoice] <= 0){
-			console.log(pchoice);
-			pchoice++;
-		}
 	
-	console.log("AIPLAY  " + pchoice);
+	console.log(Number.MAX_SAFE_INTEGER + "max");
 	potSelected(MAX, pchoice);	
 }
 
@@ -80,12 +73,12 @@ renderMove = function(player, pot, stones){
 
 		while(stones-- > 0){
 
-var duration = 5000;
-$({to:0}).animate({to:1}, duration, function() {
-  // do stuff after `duration` elapsed
-  console.log("stuff");
-  $("#messageTimer").html("Happy New Year ! (working version)")
-})
+			var duration = 1000;
+			$({to:0}).animate({to:1}, duration, function() {
+			  // do stuff after `duration` elapsed
+			  console.log("delayedStuff");
+			  $("#messageTimer").html("Happy New Year ! (working version)")
+			})
 			currentpot++;
 
 			if(currentpot < 6){
@@ -137,6 +130,7 @@ $({to:0}).animate({to:1}, duration, function() {
 			var duration = 5000;
 $({to:0}).animate({to:1}, duration, function() {
   // do stuff after `duration` elapsed
+  console.log("delayedStuff MIN");
   $("#messageTimer").html("Happy New Year ! (working version)")
 })
 
@@ -179,6 +173,21 @@ $({to:0}).animate({to:1}, duration, function() {
 
 				currentpot = 0;
 				side = player==MAX?MIN:MAX;
+			}
+		}
+
+		if(gameboard.LandedInEmptyParallelPot()){
+			if(side == MAX){
+				if(PLAYER == MAX){
+					$('#p' + (5 - currentpot)).children().attr('src', 'static/images/pots/0.jpg');
+					$('#pn' + (5 - currentpot)).children().attr('src', 'static/images/numbers/0.jpg');
+				}
+			}
+			else{
+				if(PLAYER == MIN){
+					$('#ai' + (5 - currentpot)).children().attr('src', 'static/images/pots/0.jpg');
+					$('#ain' + (5 - currentpot)).children().attr('src', 'static/images/numbers/0.jpg');
+				}
 			}
 		}
 
@@ -280,14 +289,13 @@ minimax = function (startboard, depth, player) {
 	    //	Performs the minimax procedure by initializing alpha and beta and calling
 	    //  minimax(startboard, depth, player, alpha, beta)
 
-	    return minimax(startboard, depth, player, Integer.MIN_VALUE, Integer.MAX_VALUE);
+	    return minimax(startboard.Board(startboard), depth, player, Number.MIN_SAFE_INTEGER, Number.MAX_SAFE_INTEGER);
 }
 
     minimax = function (startboard, depth, player, alpha, beta) {
 	    //  Performs the minimax procedure with cutoff values alpha and beta
 	    
 	    val = [0,0];
-	    
 	    if(startboard.isWin()){
 	    	    if(startboard.eval() > 0){  //MAX win
 	    	    	    val[0] = Number.MAX_SAFE_INTEGER;
@@ -312,16 +320,15 @@ minimax = function (startboard, depth, player) {
 	    	    succ = startboard.getSucc(player);
 	    	    for(var x = 0; x < 6; x++){ 	    
 	    	    	    if(succ[x] != null){
-	    	    	    	    console.log("max" + x);
 	    	    	    	    if(succ[x].freeTurn()){
 	    	    	    	    	    
 	    	    	    	    }
 	    	    	    	    
-	    	    	    	    val = minimax(new Board(succ[x]), depth-1, MIN, alpha, beta);
+	    	    	    	    val = minimax(succ[x], depth-1, MIN, alpha, beta);
 	    	    	    	    
 	    	    	    	    
-	    	    	    	    if(alpha < val[0]){
-	    	    	    	    	    
+	    	    	    	    if(alpha < val[0] || !Number.isSafeInteger(alpha)){
+
 	    	    	    	    	    alpha = val[0];
 	    	    	    	    	    best = x;
 	    	    	    	    }
@@ -350,17 +357,19 @@ minimax = function (startboard, depth, player) {
 	    	    succ = startboard.getSucc(player);
 	    	    for(var x = 0; x < 6; x++){ 	    
 	    	    	    if(succ[x] != null){
+	    	    	    	    val = minimax(succ[x], depth-1, MAX, alpha, beta);
 	    	    	    	    
-	    	    	    	    val = minimax(succ[x], depth-1, MIN, alpha, beta);
 	    	    	    	    
-	    	    	    	    
-	    	    	    	    if(beta > val[0]){
+	    	    	    	    if(beta > val[0] || !Number.isSafeInteger(beta)){
 	    	    	    	    	    
 	    	    	    	    	    beta = val[0];
 	    	    	    	    	    best = x;
+
+
 	    	    	    	    }
-	    	    	    	    
+
 	    	    	    	    if(beta <= alpha){
+
 	    	    	    	    	    /* 	    	    	    
 	    	    	    	    	    Integer temp[2] = new Integer[2];
 	    	    	    	    	    temp[0] = Integer.valueOf(alpha);
